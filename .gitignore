@@ -1,6 +1,7 @@
 jquery
 public/javascript/pl0.js
 database.db
-config/config.yml
+config/config_*.yml
 .bundle
 .sass-cache
+*~
