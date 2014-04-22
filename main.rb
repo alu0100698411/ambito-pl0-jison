@@ -25,6 +25,10 @@ get '/tests' do
   erb :tests
 end
 
+get '/listfiles' do
+  erb :listFiles, :locals => { :files => PL0Program.all }
+end
+
 get '/:selected?' do |selected|
   puts "*************@auth*****************"
   puts session[:name]
@@ -58,7 +62,8 @@ post '/save' do
         end
         c = PL0Program.create(
           :name => params["fname"], 
-          :source => params["input"])
+          :source => params["input"]
+		  :user => params[:name])
       end
       flash[:notice] = 
         %Q{<div class="success">File saved as <b>#{c.name}</b> by #{session[:name]}.</div>}
