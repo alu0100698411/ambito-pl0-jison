@@ -27,7 +27,7 @@ end
 
 get '/listfiles' do
   erb :listFiles, 
-      :locals => { :programs => PL0Program.all }
+      :locals => { :programlist => PL0Program.all }
 end
 
 get '/:selected?' do |selected|
@@ -38,7 +38,7 @@ get '/:selected?' do |selected|
   pp programs
   puts "selected = #{selected}"
   c  = PL0Program.first(:name => selected)
-  source = if c then c.source else "a = 3-2-1" end
+  source = if c then c.source else "a = 3-2-1." end
   erb :index, 
       :locals => { :programs => programs, :source => source }
 end
@@ -64,7 +64,7 @@ post '/save' do
         c = PL0Program.create(
           :name => params["fname"], 
           :source => params["input"],
-          :user => params[:name])
+          :user => session[:name])
       end
       flash[:notice] = 
         %Q{<div class="success">File saved as <b>#{c.name}</b> by #{session[:name]}.</div>}

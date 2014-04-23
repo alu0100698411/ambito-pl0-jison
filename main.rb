@@ -64,7 +64,7 @@ post '/save' do
         c = PL0Program.create(
           :name => params["fname"], 
           :source => params["input"],
-          :user => params[:name])
+          :user => session[:name])
       end
       flash[:notice] = 
         %Q{<div class="success">File saved as <b>#{c.name}</b> by #{session[:name]}.</div>}
