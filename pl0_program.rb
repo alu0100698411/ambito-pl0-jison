@@ -8,7 +8,7 @@ class Pl0user
   
   property :user, String, :key => true
 
-  has n, :pL0Programs, :required => false #puede tener 0 o mas programas
+  has n, :pl0programs
 end				 
 				 
 class PL0Program
@@ -18,7 +18,7 @@ class PL0Program
   property :user, String, :key => true
   property :source, String, :length => 1..1024
   
-  belongs_to :pl0user, :required => false #por defecto estaría a true
+  belongs_to :pl0user => false #por defecto estaría a true
 end
 
 DataMapper.finalize
