@@ -1,0 +1,6 @@
+ <div class="picture"> <%= session[:image] %></div>
+ <ul class="FileList">
+    <% files.each do |file| %>
+      <li><a href="<%= file.name %>">><%= file.name %></a></li>
+    <% end %>
+  </ul>

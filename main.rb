@@ -26,7 +26,8 @@ get '/tests' do
 end
 
 get '/listfiles' do
-  erb :listFiles, :locals => { :files => PL0Program.all }
+  erb :listFiles, 
+      :locals => { :files => PL0Program.all }
 end
 
 get '/:selected?' do |selected|
