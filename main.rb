@@ -75,7 +75,7 @@ post '/save' do
     end
   else
     flash[:notice] = 
-      %Q{<div class="error">You are not authenticated. Please, Sign in.
+      %Q{<div class="error">You are not authenticated. Please sign in.
          </div>}
     redirect back
   end
