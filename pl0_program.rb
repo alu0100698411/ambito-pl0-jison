@@ -18,7 +18,7 @@ class PL0Program
   property :user, String, :key => true
   property :source, String, :length => 1..1024
   
-  belongs_to :pl0user => false #por defecto estaría a true
+  belongs_to :pl0user 
 end
 
 DataMapper.finalize
