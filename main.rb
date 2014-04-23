@@ -26,11 +26,8 @@ get '/tests' do
 end
 
 get '/listfiles' do
-  pp session[:auth]
-  programs = PL0Program.all
-
   erb :listFiles, 
-      :locals => { :programs => programs }
+      :locals => { :programs => PL0Program.all }
 end
 
 get '/:selected?' do |selected|
