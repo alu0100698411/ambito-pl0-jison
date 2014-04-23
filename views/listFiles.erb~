@@ -1,7 +1,7 @@
  <div class="picture"> <img src="<%= session[:image] %>" alt="Hey, it's me!"> </div>
  <ul class="FileList">
 
-<%programs.each do|p| %>
+<%programslist.each do|p| %>
           <li><a href="<%= p.name %>" <%=current?('/'+p.name)%>><%= p.name %></a></li>
  <% end %>
 
