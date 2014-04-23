@@ -11,8 +11,8 @@ h1 {
 
 h2 {
   color: #990033;
-  text-align:left;
-  font-weight:bold;
+  text-align: left;
+  font-weight: bold;
   margin: 0;
 }
 
@@ -74,6 +74,15 @@ label {
 #wrapper {
   width: 1200px;
   margin: 0 auto;
+}
+
+.picture {
+  height: 200px;
+  margin-bottom: 5px;
+}
+.picture img {
+  height: 100%;
+  border-radius: 15px;
 }
 
 #logo {
