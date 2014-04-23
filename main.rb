@@ -65,7 +65,7 @@ post '/save' do
         end
         c = PL0Program.create(
           :name => params["fname"], 
-          :source => params["input"]
+          :source => params["input"],
           :user => params[:name])
       end
       flash[:notice] = 
