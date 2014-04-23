@@ -3,30 +3,18 @@ task :default => [:use_keys, :jison] do
   sh "rackup"
 end
 
-desc "Save config.yml out of the CVS"
-task :keep_secrets do
-  sh "cp config/config_template.yml config/config.yml "
+desc "Create the config_filled for google/facebook/github"
+task :create_secrets do
+  sh "cp config/config_template.yml config/github_config_filled.yml"
+  sh "cp config/config_template.yml config/facebook_config_filled.yml"
+  sh "cp config/config_template.yml config/google_config_filled.yml"
 end
 
-desc "Use the google filled client_secrets"
+desc "Use the google/facebook/github filled client_secrets"
 task :use_keys do
   sh "cp config/google_config_filled.yml config/google_config.yml"
-end
-
-desc "Use the facebook filled client_secrets"
-task :use_keys do
   sh "cp config/facebook_config_filled.yml config/facebook_config.yml"
-end
-
-desc "Use the github filled client_secrets"
-task :use_keys do
   sh "cp config/github_config_filled.yml config/github_config.yml"
-end
-
-
-desc "Go to console.developers.google"
-task :link do
-  sh "open https://console.developers.google.com/project/apps~sinatra-ruby-gplus/apiui/api"
 end
 
 desc "Commit changes"
@@ -47,29 +35,25 @@ task :css do
   sh "sass public/views/styles.scss public/css/styles.css"
 end
 
-task :testf do
+task :test do
   sh " open -a firefox test/test.html"
 end
 
-task :tests do
-  sh " open -a safari test/test.html"
-end
-
-desc "Remove calculator.js"
+desc "Remove pl0.js"
 task :clean do
-  sh "rm -f public/calculator.js"
-  sh "rm -f calculator*.tab.jison"
-  sh "rm -f calculator*.output"
-  sh "rm -f calculator*.vcg"
-  sh "rm -f calculator*.c"
+  sh "rm -f public/javascript/pl0.js"
+  sh "rm -f pl0*.tab.jison"
+  sh "rm -f pl0*.output"
+  sh "rm -f pl0*.vcg"
+  sh "rm -f pl0*.c"
 end
 
 desc "Open browser in GitHub repo"
 task :github do
-  sh "open https://github.com/crguezl/ull-etsii-grado-pl-jisoncalc"
+  sh "open https://github.com/alu0100698411/ambito-pl0-jison/"
 end
 
 desc "DFA table using bison -v"
 task :table do
-  sh "bison -v public/calculator.jison"
+  sh "bison -v public/jison/pl0.jison"
 end

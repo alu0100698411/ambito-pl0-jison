@@ -63,7 +63,7 @@ post '/save' do
         c = PL0Program.create(
           :name => params["fname"], 
           :source => params["input"]
-		  :user => params[:name])
+          :user => params[:name])
       end
       flash[:notice] = 
         %Q{<div class="success">File saved as <b>#{c.name}</b> by #{session[:name]}.</div>}
@@ -72,8 +72,7 @@ post '/save' do
     end
   else
     flash[:notice] = 
-      %Q{<div class="error">You are not authenticated.<br />
-         Sign in with Google.
+      %Q{<div class="error">You are not authenticated. Please, Sign in.
          </div>}
     redirect back
   end
