@@ -26,8 +26,9 @@ get '/tests' do
 end
 
 get '/listfiles' do
+  pp session[:auth]
   programs = PL0Program.all
-  pp programs
+
   erb :listFiles, 
       :locals => { :programs => programs }
 end
