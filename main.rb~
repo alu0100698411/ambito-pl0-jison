@@ -26,8 +26,10 @@ get '/tests' do
 end
 
 get '/listfiles' do
+  usuario = Pl0user.get(session[:name])
+  programs = usuario.pL0Programs
   erb :listFiles, 
-      :locals => { :programlist => PL0Program.all }
+      :locals => { :programlist => programs }
 end
 
 get '/:selected?' do |selected|
