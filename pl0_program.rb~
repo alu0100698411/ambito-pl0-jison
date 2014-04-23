@@ -11,14 +11,14 @@ class Pl0user
   has n, :pl0programs
 end				 
 				 
-class PL0Program
+class Pl0program
   include DataMapper::Resource
   
   property :name, String, :key => true
   property :user, String, :key => true
   property :source, String, :length => 1..1024
   
-  belongs_to :Pl0user 
+  belongs_to :pl0user 
 end
 
 DataMapper.finalize
