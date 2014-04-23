@@ -11,7 +11,7 @@ class Pl0user
   has n, :pl0programs
 end				 
 				 
-class PL0Program
+class Pl0program
   include DataMapper::Resource
   
   property :name, String, :key => true
