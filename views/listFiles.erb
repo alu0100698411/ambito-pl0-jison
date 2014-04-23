@@ -1,6 +1,6 @@
  <div class="picture"> <img src="<%= session[:image] %>" alt="Hey, it's me!"> </div>
  <ul class="FileList">
-    <% files.each do |file| %>
-      <li><a href="<%= file.name %>">><%= file.name %></a></li>
+    <% programs.sort.each do |p| %>
+      <li><a href="<%= p.name %>" <%=current?('/'+p.name)%>><%= p.name %></a></li>
     <% end %>
   </ul>
