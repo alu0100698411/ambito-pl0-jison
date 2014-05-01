@@ -15,6 +15,13 @@ helpers do
   def current?(path='/')
     (request.path==path || request.path==path+'/') ? 'class = "current"' : ''
   end
+  def inSession?()
+        if session[:auth] # authenticated
+		#Mostrar you're logged as
+	else
+		#Mostrar metodos de inicio
+	end
+  end 
 end
 
 get '/grammar' do
@@ -27,9 +34,8 @@ end
 
 get '/listfiles' do
   usuario = Pl0user.get(session[:name])
-  programs = usuario.pL0Programs
   erb :listFiles, 
-      :locals => { :programlist => programs }
+      :locals => { :programlist => PL0Program.all(:user => session["name"])}
 end
 
 get '/:selected?' do |selected|
@@ -37,9 +43,7 @@ get '/:selected?' do |selected|
   puts session[:name]
   pp session[:auth]
   programs = PL0Program.all
-  pp programs
-  puts "selected = #{selected}"
-  c  = PL0Program.first(:name => selected)
+  c  = PL0Program.first(:name => selected, :user => session[:name])
   source = if c then c.source else "a = 3-2-1." end
   erb :index, 
       :locals => { :programs => programs, :source => source }
@@ -50,10 +54,10 @@ post '/save' do
   name = params[:fname]
   if session[:auth] # authenticated
     if settings.reserved_words.include? name  # check it on the client side
-      flash[:notice] = 
+      flash[:notice] =
         %Q{<div class="error">Can't save file with name <b>'#{name}'</b>.</div>}
       redirect back
-    else 
+    else
       c  = PL0Program.first(:name => name)
       if c
         c.source = params["input"]
@@ -64,17 +68,18 @@ post '/save' do
           c.destroy
         end
         c = PL0Program.create(
-          :name => params["fname"], 
+          :name => params["fname"],
           :source => params["input"],
-          :user => session[:name])
+          :user => Pl0user.get(session[:name]).user)
+ 
       end
-      flash[:notice] = 
+      flash[:notice] =
         %Q{<div class="success">File saved as <b>#{c.name}</b> by #{session[:name]}.</div>}
       pp c
       redirect to '/'+name
     end
   else
-    flash[:notice] = 
+    flash[:notice] =
       %Q{<div class="error">You are not authenticated. Please sign in.
          </div>}
     redirect back

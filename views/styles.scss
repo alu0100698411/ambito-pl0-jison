@@ -107,30 +107,20 @@ label {
 
 }
 
-#networks{
-	ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		overflow: hidden;
-	}
-	li {
-		float: left;
-	}
-	a {
-		text-decoration: none;
-		display: block;
-		padding: 8px;
-	}
-
+.divdoble{
+  margin-top:5px;
+  width: 100%;
+  float:left;
+  .divmitad{
+     width:50%;
+     float:left;
+  }
 }
 
 .loadfile {
   background-color: $black;
   border-radius: 10px;
   line-height: 80px;
-  
-  width: 700px;
   height: 20px;
   padding:10px 10px 15px 10px;
   margin: 10px auto;
@@ -182,8 +172,13 @@ label {
   text-align: left;
 }
 
+.right{
+  text-align:right;
+}
+
 #output {
   padding: 35px;
+  margin-top:80px;
   text-align: left;
   color: white;
   border-radius: 10px;

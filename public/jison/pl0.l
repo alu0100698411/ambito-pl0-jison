@@ -13,6 +13,7 @@ function idORrw(x) {
 "("                        	 {return '(';}
 ")"                       	 {return ')';}
 ";"			  	 {return ';';}
+","				 {return ',';}
 "."                       	 {return '.';}
 [<>=!][=]|[<>]                   {return 'COMPARISON'};
 "="                      	 {return '=';}

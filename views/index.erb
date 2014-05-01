@@ -1,43 +1,30 @@
 <h1>Jison PL0 Parser</h1>
 <div id="content">
-  <p class="loadfile">
-    <input type="file" id="examples" />
-  </p>
+
   <p>
-  <nav class="menu">
-  <ul>
-    <% programs.sort.each do |p| %>
-      <li><a href="<%= p.name %>" <%=current?('/'+p.name)%>><%= p.name %></a></li>
-    <% end %>
-  </ul>
-  </nav>
 	<!-- Create a simple CodeMirror instance -->
 	<link rel="stylesheet" href="codemirror/codemirror.css">
 	<script src="codemirror/codemirror.js"></script>
 	<script src="codemirror/pl0g.js"></script>
-
+	<p class="loadfile">
+		<input type="file" id="examples" />
+	</p>
 	<div id="form">
 	<form action="/save" method="post">
 	<textarea id="input" name="input" autofocus rows = "10"><%= source %></textarea>
-	<br/>
-	<div class="centered">
-	<button id="parse" type="button">CLIK HERE FOR PARSING</button>
+
+	<div class="divdoble">
+		<div class="divmitad left">
+			<button id="parse" type="button">CLIK HERE FOR PARSING</button>
+		</div>
+		<div class="divmitad right">
+			<label for="saveas"><b>Save file as</b></label>
+			<input id="saveas" type="text" name="fname" title="name" pattern="\w+" />
+		</div>
 	</div>
-        <h2>Sign in for saving your files:</h2>
-        <nav id="networks">
-            <ul>
-	      <li><a href="/auth/google_oauth2" title="Google" <%=current?("/auth/google_oauth2")%>><img alt="Google" src="/images/google.png"></a></li>
-	      <li><a href="/auth/facebook" title="Facebook" <%=current?("/auth/facebook")%>><img  alt="Facebook" src="/images/facebook.png"></a> </li>
-	      <li><a href="/auth/github" title="Github" <%=current?("/auth/github")%>><img  alt="Github" src="/images/github.png"></a> </li>
-	      <li>		<label for="saveas"><b>Save file as</b></label>
-		<input id="saveas" type="text" name="fname" title="name" pattern="\w+" /></li>            
-</ul>
 
 	</form>	  
 	</div>
-
-
-        </nav>
   </p>
   <p>
     <div id="flash"><%= flash[:notice] if flash[:notice]%></div>

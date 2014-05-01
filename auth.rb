@@ -18,16 +18,18 @@ get '/auth/:name/callback' do
   session[:auth] = @auth = request.env['omniauth.auth']
   session[:name] = @auth['info'].name
   session[:image] = @auth['info'].image
+  u = Pl0user.get(session[:name])
+  if u.nil?
+     Pl0user.create(:user => session[:name])
+  end
+
   puts "params = #{params}"
   puts "@auth.class = #{@auth.class}"
   puts "@auth info = #{@auth['info']}"
   puts "@auth info class = #{@auth['info'].class}"
   puts "@auth info name = #{@auth['info'].name}"
   puts "@auth info email = #{@auth['info'].email}"
-  #puts "-------------@auth----------------------------------"
-  #PP.pp @auth
-  #puts "*************@auth.methods*****************"
-  #PP.pp @auth.methods.sort
+
   flash[:notice] = 
         %Q{<div class="success">Authenticated as <b>#{@auth['info'].name}.</b></div>}
   redirect '/'
