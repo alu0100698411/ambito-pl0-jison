@@ -9,10 +9,21 @@
   </head>
   <body class="centered">
       <div id="wrapper">
-	<header class="centered">
+	<header class="centered relative">
 		<div id="logo">
 			<img alt="ASA Parser Logo" src="/images/logo.png">
 		</div>
+        <div id="networks" class="right">	
+		<div class="insession">
+	     		<%=inSession?()%> <img src="/images/arrow.png" alt="Click below" >
+		</div>
+		<div class="oauths">
+		<a href="/auth/google_oauth2" title="Google" <%=current?("/auth/google_oauth2")%>><img alt="Google" src="/images/google.png"></a>
+		<a href="/auth/facebook" title="Facebook" <%=current?("/auth/facebook")%>><img  alt="Facebook" src="/images/facebook.png"></a> 
+		<a href="/auth/github" title="Github" <%=current?("/auth/github")%>><img  alt="Github" src="/images/github.png"></a> 
+		</div>
+	</div>		
+
 	</header>
         <nav class="menu">
             <ul>
@@ -29,6 +40,7 @@
           </ul>
       </nav>
       <section>
+
 	   <%= yield %>
       </section>
     </div>

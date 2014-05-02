@@ -17,9 +17,9 @@ helpers do
   end
   def inSession?()
         if session[:auth] # authenticated
-		#Mostrar you're logged as
+		"<img class=\"borderradius\" src=\"#{session[:image]}\" width=\"35\" height=\"35\"> Authenticated as <b>#{session[:name]}</b>. Want to login with another account?"
 	else
-		#Mostrar metodos de inicio
+		"Please, <b>sign in</b> for saving your files"
 	end
   end 
 end
@@ -44,7 +44,7 @@ get '/:selected?' do |selected|
   pp session[:auth]
   programs = PL0Program.all
   c  = PL0Program.first(:name => selected, :user => session[:name])
-  source = if c then c.source else "a = 3-2-1." end
+  source = if c then c.source else "CONST PI = 3.14;\n\nVAR alto, ancho;\nVAR largo;\n\nPROCEDURE area(x, y);\n\tVAR resultado;\n\tBEGIN\n\n\tIF(x != 0) THEN\n\t\tresultado = x * y\n\tELSE\n\t\tresultado = 0\n\tEND;\n\nPROCEDURE volumen(x,y,z);\n\tVAR resultado;\n\tresultado = x * y * z;\n\nBEGIN\n\tCALL area(alto, ancho);\n\tCALL volumen(alto, ancho, largo)\nEND\n." end
   erb :index, 
       :locals => { :programs => programs, :source => source }
 end

@@ -14,7 +14,7 @@ CodeMirror.defineMode("pascal", function() {
     for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
     return obj;
   }
-  var keywords = words("call begin end procedure const var if then else while do odd ");
+  var keywords = words("CALL BEGIN END PROCEDURE CONST VAR IF THEN ELSE WHILE DO ODD");
   var atoms = {"null": true};
 
   var isOperatorChar = /[+\-*&%=<>!?|\/]/;

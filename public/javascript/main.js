@@ -4,6 +4,7 @@ $(document).ready(function() {
       editor = $(".CodeMirror")[0].CodeMirror
       var result = pl0.parse(editor.getValue());
       $('#output').html(JSON.stringify(result,undefined,2));
+      $( '#salida').removeClass( "divdoble hidden" ).addClass( "divdoble unhidden" );
     } catch (e) {
       $('#output').html('<div class="error"><pre>\n' + String(e) + '\n</pre></div>');
     }

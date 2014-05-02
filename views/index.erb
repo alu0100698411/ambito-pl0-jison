@@ -1,4 +1,4 @@
-<h1>Jison PL0 Parser</h1>
+<h1>Jison PL0 Parser with Scope Analysis</h1>
 <div id="content">
 
   <p>
@@ -15,11 +15,12 @@
 
 	<div class="divdoble">
 		<div class="divmitad left">
-			<button id="parse" type="button">CLIK HERE FOR PARSING</button>
-		</div>
-		<div class="divmitad right">
 			<label for="saveas"><b>Save file as</b></label>
 			<input id="saveas" type="text" name="fname" title="name" pattern="\w+" />
+
+		</div>
+		<div class="divmitad right">
+			<button id="parse" type="button">CLIK HERE FOR PARSING</button>
 		</div>
 	</div>
 
@@ -29,12 +30,18 @@
   <p>
     <div id="flash"><%= flash[:notice] if flash[:notice]%></div>
   </p>
-  <div class="output"><!-- Output goes here! --> 
-<pre>
-<div id="output">
-</div>
-</pre>
-  </div>
+
+  <div id="salida" class="divdoble hidden">
+      <pre class="output divoutput">
+	      <div id="output">
+	      </div>
+      </pre>
+      <pre class="output divoutput">
+	<div id="ambit">
+	</div>
+      </pre>
+  </div>	
+
 </div>
 
 <!-- Script para el CodeMirror -->

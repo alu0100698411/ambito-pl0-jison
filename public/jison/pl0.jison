@@ -126,11 +126,11 @@ term
         : factorlist {$$ = $1;}
         ;
  
- 
 factorlist
         : factor {$$ = $1;}
         | factorlist MULTDIVOP factor { $$ = { type: $2, left: $1, right: $3 }; }
         ;
+
 /*factor = ident | number | "(" expression ")".*/
 factor
         : ID {$$ = {type: 'ID', value: yytext};}

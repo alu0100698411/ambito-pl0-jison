@@ -30,8 +30,7 @@ get '/auth/:name/callback' do
   puts "@auth info name = #{@auth['info'].name}"
   puts "@auth info email = #{@auth['info'].email}"
 
-  flash[:notice] = 
-        %Q{<div class="success">Authenticated as <b>#{@auth['info'].name}.</b></div>}
+  # flash[:notice] =  %Q{<div class="success">Authenticated as <b>#{@auth['info'].name}.</b></div>}
   redirect '/'
 end
 
