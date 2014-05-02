@@ -6,8 +6,8 @@
  
 /* operator associations and precedence */
 %right '='
-%left ADDSUBOP
-%left MULTDIVOP
+%left '+' '-'
+%left '*' '/'
 %left '^'
 %right '%'
 %left UMINUS
@@ -30,38 +30,53 @@ block
  
 variable
         : /* empty */
-        | VAR idlist ";" variable { $$ = { type: $1, left: $2, right: $4 }; }
+        | VAR idlist ";" variable {	
+
+                                        $$ = [$2];
+                                        if ($4 && $4.length > 0)
+                                                $$ = $$.concat($4);
+                                    }
         ;
 idlist
-        : ID {$$ = $1;}
-        | idlist ","  ID {
+        : ident {$$ = [$1];}
+        | idlist ","  ident {
                                         $$ = [$3];
                                         if ($1 && $1.length > 0)
                                                 $$ = $$.concat($1);
                                     }
         ;
  
+ident
+	: ID {$$ = {name: $1};}
+	;
+
  
 constant
         : /* empty */
-        | CONST constantlist ";" constant { $$ = { type: $1, left: $2, right: $4 }; }
+        | CONST constantlist ";" constant {
+                                        $$ = [$2];
+                                        if ($4 && $4.length > 0)
+                                                $$ = $$.concat($4);
+                                    }
         ;
  
 constantlist
-        : idnumber
-        | constantlist ","  idnumber { $$ = { type: $2, left: $1, right: $3 }; }
+        : idnumber {$$ =  [$1];}
+        | constantlist ","  idnumber {
+                                        $$ = $1;
+					$$ = $$.concat($3);
+                                    }
         ;
  
 idnumber
-        :  ID "=" NUMBER { $$ = { type: $2, left: $1, right: $3 }; }
+        :  ID "=" NUMBER { $$ = { name: $1, value: $3 }; }
         ;
  
 argumentlist
-        : factor {$$ = $1;}
-        | argumentlist ","  factor  {
-                                        $$ = [$3];
-                                        if ($1 && $1.length > 0)
-                                                $$ = $$.concat($1);
+        : base {$$ = [$1];}
+        | argumentlist ","  base  {
+                                        $$ = $1;
+					$$ = $$.concat($3);
                                     }
         | /* empty */
         ;
@@ -69,13 +84,13 @@ argumentlist
  
 procedure
         : /* empty */
-        | PROCEDURE ID "(" argumentlist ")" ";" block ";" procedure { $$ = {    type: $1,
+        | PROCEDURE ID "(" argumentlist ")" ";" block ";" procedure { $$ = [{    type: $1,
                                                                                 value: $2,
                                                                                 arguments: $4,
-                                                                                block: $5
-                                                                        };
-                                                                        if ($7 && $7.length > 0)
-                                                                                $$ = $$.concat($7);
+                                                                                block: $7
+                                                                        }];
+                                                                        if ($9 && $9.length > 0)
+                                                                                $$ = $$.concat($9);
                                                                         }
         ;
  
@@ -83,57 +98,49 @@ procedure
             "begin" statement {";" statement } "end" |
             "if" condition "then" statement |
             "while" condition "do" statement ]*/
+
 statement
-        : ID "=" expresion { $$ = { type: $2, left: $1, right: $3 }; }
-        | CALL ID "(" argumentlist ")" { $$ = { type: $1, left: $2, right: $4 }; }
-        | BEGIN statementlist END { $$ = { type: $1, left: null, right: $2 }; }
+        : ID "=" expresion { $$ = { type: "Assigment", left: $1, right: $3 }; }
+        | CALL ID "(" argumentlist ")" { $$ = { type: $1, name: $2, arguments: $4 }; }
+        | BEGIN statementlist END { $$ = { type: $1, statements: $2 }; }
         | ifstatement {$$ = $1;}
-        | WHILE '(' condition ')'  DO statement { $$ = { type: $1, left: $3, right: $6 }; }
+        | WHILE '(' condition ')'  DO statement { $$ = { type: $1, condition: $3, statements: $6 }; }
         ;
  
 ifstatement
-        : IF '(' condition ')' THEN statement { $$ = { type: $1, left: $3, right: $5 }; }
-        | IF '(' condition ')' THEN statement ELSE statement { $$ = { type: $1, cond: $3, then: $6, else: $6 }; }
+        : IF '(' condition ')' THEN statement { $$ = { type: "IF", condition: $3, statements: $5 }; }
+        | IF '(' condition ')' THEN statement ELSE statement { $$ = { type: "IFELSE", condition: $3, statements: $6, elsestatements: $8 }; }
         ;
  
 statementlist
-        : statement {$$ = $1;}
-        | statementlist ";" statement { $$ = { type: $2, left: $1, right: $3 }; }
+        : statement {$$ = [$1];}
+        | statementlist ";" statement {
+                                        $$ = $1;
+					$$ = $$.concat($3);
+                                    }
         ;
  
 /*condition = "odd" expression |
             expression ("="|"#"|"<"|"<="|">"|">=") expression */
  
 condition
-        : ODD expresion { $$ = { type: $1, left: $2, right: null }; }
+        : ODD expresion { $$ = { type: $1, expresion: $2}; }
         | expresion COMPARISON expresion { $$ = { type: $2, left: $1, right: $3 }; }
         ;
- 
-/*expression = [ "+"|"-"] term { ("+"|"-") term}.*/
-expresion
-        : ADDSUBOP termlist { $$ = { type: $1, left: $2, right: null }; }
-        | termlist      {$$ = $1;}
-        ;
- 
-termlist
-        : term {$$ = $1;}
-        | termlist ADDSUBOP term { $$ = { type: $2, left: $1, right: $3 }; }
-        ;
- 
- 
-/*term = factor {("*"|"/") factor}.*/
-term
-        : factorlist {$$ = $1;}
-        ;
- 
-factorlist
-        : factor {$$ = $1;}
-        | factorlist MULTDIVOP factor { $$ = { type: $2, left: $1, right: $3 }; }
-        ;
 
-/*factor = ident | number | "(" expression ")".*/
-factor
+expresion
+  : expresion '+' expresion { $$ = { type: $2, left: $1, right: $3 }; }
+  | expresion '-' expresion { $$ = { type: $2, left: $1, right: $3 }; }
+  | expresion '*' expresion { $$ = { type: $2, left: $1, right: $3 }; }
+  | expresion '/' expresion { $$ = { type: $2, left: $1, right: $3 }; }
+  | '-' expresion %prec UMINUS {$$ = { type: $1, value: $2 }; }
+  | base { $$ = $1;}
+  ;
+
+base
         : ID {$$ = {type: 'ID', value: yytext};}
         | NUMBER { $$ = {type: 'NUMBER', value: yytext};}
         | "(" expresion ")" {$$ = $2;}
         ;
+
+

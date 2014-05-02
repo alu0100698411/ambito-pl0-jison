@@ -15,6 +15,10 @@ function idORrw(x) {
 ";"			  	 {return ';';}
 ","				 {return ',';}
 "."                       	 {return '.';}
+"+"				 {return '+';}
+"-"                       	 {return '-';}
+"*"				 {return '*';}
+"/"                       	 {return '/';}
 [<>=!][=]|[<>]                   {return 'COMPARISON'};
 "="                      	 {return '=';}
 "CALL"                    	 {return 'CALL';}
@@ -31,6 +35,6 @@ function idORrw(x) {
 "CONST"                          {return 'CONST';}
 \b\d+("."\d*)?([eE][-+]?\d+)?\b  {return 'NUMBER';}
 \b[A-Za-z_]\w*\b                 {return idORrw(yytext);}
-[+-]                             {return 'ADDSUBOP';}
-[*/] 			         {return 'MULTDIVOP';}
+//[+-]                             {return 'ADDSUBOP';}
+//[*/] 			         {return 'MULTDIVOP';}
 <<EOF>>                    	 {return 'EOF';}
