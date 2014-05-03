@@ -88,7 +88,7 @@ case 2: this.$ = { type: "BLOCK",
 							 constantes: $$[$0-3],
 							 variables: $$[$0-2],
 							 procedimientos: $$[$0-1],
-							 statatements: $$[$0] }; 
+							 statements: $$[$0] }; 
 break;
 case 4:	
                                         this.$ = {type:$$[$0-3], value:$$[$0-2]};
@@ -137,7 +137,7 @@ case 17: this.$ = [{   type: $$[$0-8],
                                                                                 this.$ = this.$.concat($$[$0]);
                                                                         
 break;
-case 18: this.$ = { type: "Assigment", left: $$[$0-2], right: $$[$0] }; 
+case 18: this.$ = { type: "ASSIGMENT", left: $$[$0-2], right: $$[$0] }; 
 break;
 case 19: this.$ = { type: $$[$0-4], name: $$[$0-3], arguments: $$[$0-1] }; 
 break;

@@ -29,7 +29,7 @@ block
 							 constantes: $1,
 							 variables: $2,
 							 procedimientos: $3,
-							 statatements: $4 }; }
+							 statements: $4 }; }
         ;
  
 variable
@@ -103,7 +103,7 @@ procedure
             "while" condition "do" statement ]*/
 
 statement
-        : ID "=" expresion { $$ = { type: "Assigment", left: $1, right: $3 }; }
+        : ID "=" expresion { $$ = { type: "ASSIGMENT", left: $1, right: $3 }; }
         | CALL ID "(" argumentlist ")" { $$ = { type: $1, name: $2, arguments: $4 }; }
         | BEGIN statementlist END { $$ = { type: $1, statements: $2 }; }
         | ifstatement {$$ = $1;}

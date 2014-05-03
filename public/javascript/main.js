@@ -7,6 +7,7 @@ $(document).ready(function() {
       $('#ambit').html(JSON.stringify(scopeAnalysis(result),undefined,2));
       $( '#salida').removeClass( "divdoble hidden" ).addClass( "divdoble unhidden" );
     } catch (e) {
+      $( '#salida').removeClass( "divdoble hidden" ).addClass( "divdoble unhidden" );
       $('#output').html('<div class="error"><pre>\n' + String(e) + '\n</pre></div>');
     }
   });
@@ -34,10 +35,13 @@ function getScope(){
 
 
 function nodeAnalysis(node){
+	console.log("ENTRA A NODEANALYSIS"); 
+	
 	if (!node) return;
 
 	switch (node.type){
 		case "PROCEDURE":
+			console.log("ENTRA A PROCEDURE"); 
 			var symbolTable = {name: node.value, father: symbolTableActual, consts: {}, vars: {}, procs: {}};
 
 			if(node.hasOwnProperty("arguments") && node.arguments !== undefined){
@@ -70,31 +74,39 @@ function nodeAnalysis(node){
 				}
 			}
 			if(node.block.hasOwnProperty("statements") && node.block.statements !== undefined){
-				for (var i in node.block.statements){
-					nodeAnalysis(node.block.statements[i]);
-				}
+							console.log("EL PROCEDURE TIENE STATEMENTS"); 
+							nodeAnalysis(node.block.statements);
 			}	
 	
 			break;	
 		case "ASSIGMENT":
+			console.log("ENTRA A ASIGGMENT"); 
 			//COMPROBAR QUE LA ID IZQUIERDA NO ES UNA CONSTANTE Y ESTA DEFINIDO
+			if (estaDefinidoConstante(node.left))
+				throw("Identifier \""+ node.left + "\" is a constant, and u can't assing a value");	
+			if (!estaDefinido(node.left))
+				throw("Identifier \""+ node.left + "\" has not being declared and it's being used");	
 			nodeAnalysis(node.right);
 			break;
 		case "CALL":
+			console.log("ENTRA A CALL"); 
 			//COMPROBAR QUE LA FUNCION EXISTE Y TIENE EL NUMERO DE ARGUMENTOS CORRECTOS
 			break;
 		case "BEGIN":
+			console.log("ENTRA A begin"); 
 			for (var i in node.statements){
 				nodeAnalysis(node.statements[i]);
 			}
 			break;
 		case "IF":
+			console.log("ENTRA A IF"); 
 			nodeAnalysis(node.condition);
 			for (var i in node.statements){
 				nodeAnalysis(node.statements[i]);
 			}
 			break;
 		case "IFELSE":
+			console.log("ENTRA A IFELSE"); 
 			nodeAnalysis(node.condition);
 			for (var i in node.statements){
 				nodeAnalysis(node.statements[i]);
@@ -104,6 +116,7 @@ function nodeAnalysis(node){
 			}
 			break;
 		case "ODD":
+			console.log("ENTRA A ODD"); 
 			nodeAnalysis(node.expresion);
 			break;
 		case "==":
@@ -115,10 +128,12 @@ function nodeAnalysis(node){
 		case "+":
 		case "*":
 		case "/":
+			console.log("ENTRA A COMPARISON"); 
 			nodeAnalysis(node.left);
 			nodeAnalysis(node.right);
 			break;
 		case "-":
+			console.log("ENTRA A -"); 
 			if(node.value){
 				nodeAnalysis(node.value);
 			}else{
@@ -127,8 +142,11 @@ function nodeAnalysis(node){
 			}
 			break;	
 		case "NUMBER":
+			console.log("ENTRA A NUMBER"); 
 			break;
 		case "ID":
+			console.log("ENTRA A ID"); 
+			//COMPROBAR QUE EL ID ESTA DEFINIDO
 			break;
 	}
 
@@ -166,13 +184,56 @@ function scopeAnalysis(tree){
 	}
 
 	if(tree.hasOwnProperty("statements") && tree.statements !== undefined){
-				for (var i in tree.statements){
-					nodeAnalysis(tree.statements[i]);
-				}
-			}
+	console.log("EL BLOQUE PRINCIPAL TIENE STATEMENTS"); 
+					nodeAnalysis(tree.statements);
+	}
 
 	return tree;
 }
 
-  
+function estaDefinido(id){
+	if(estaDefinidoVariable(id) || estaDefinidoConstante(id)){
+		return true;
+	}
+	return false;
+}
+ 
+function estaDefinidoVariable(id){
+        var symbolTableAux = symbolTableActual;
+        do{
+                var contenido = symbolTableAux.vars[id];
+                if(contenido === undefined){
+                   symbolTableAux = symbolTableAux.father;
+                }else{
+                   return true;        
+                }
+        }while(symbolTableAux != null);
+        return false;
+}
 
+ 
+function estaDefinidoConstante(id){
+        var symbolTableAux = symbolTableActual;
+        do{
+                var contenido = symbolTableAux.consts[id];
+                if(contenido === undefined){
+                   symbolTableAux = symbolTableAux.father;
+                }else{
+                   return true;        
+                }
+        }while(symbolTableAux != null);
+        return false;
+}
+
+function estaDefinidoProcedure(id){
+        var symbolTableAux = symbolTableActual;
+        do{
+                var contenido = symbolTableAux.procs[id];
+                if(contenido === undefined){
+                   symbolTableAux = symbolTableAux.father;
+                }else{
+                   return true;        
+                }
+        }while(symbolTableAux != null);
+        return false;
+}
