@@ -15,14 +15,14 @@
 
 Enlace al despliegue de la aplicación en Heroku
 
-- Heroku: <http://jisonpl0.herokuapp.com/> http://jisonpl0.herokuapp.com/</href>
+- Heroku: <href =http://pl0ambitparser.herokuapp.com> http://pl0ambitparser.herokuapp.com</href>
 
 ## TEST ##
 
 Enlace a la página de pruebas
 
-- Pruebas: <http://jisonpl0.herokuapp.com/tests> http://jisonpl0.herokuapp.com/tests </href>
+- Pruebas: <href = http://pl0ambitparser.herokuapp.com/tests> http://pl0ambitparser.herokuapp.com/tests </href>
 
 ## GRAMMAR ##
 
-- Gramática: <http://jisonpl0.herokuapp.com/grammar> http://jisonpl0.herokuapp.com/grammar</href>
+- Gramática: <href = http://pl0ambitparser.herokuapp.com/grammar> http://pl0ambitparser.herokuapp.com/grammar</href>
