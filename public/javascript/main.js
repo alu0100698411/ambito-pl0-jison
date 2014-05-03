@@ -86,7 +86,7 @@ function nodeAnalysis(node){
 		case "CALL":
 			//COMPROBAR QUE LA FUNCION EXISTE Y TIENE EL NUMERO DE ARGUMENTOS CORRECTOS
 			if(estaDefinidoProcedure(node.name) == -1){
-				throw("Identifier \""+ node.left + "\" has not being declared and it's being used");	
+				throw("Identifier \""+ node.name + "\" has not being declared and it's being used");	
 			}else if(estaDefinidoProcedure(node.name) != node.arguments.length){
 					throw("Procedure \""+ node.name + "\" expects " + estaDefinidoProcedure(node.name)+ " arguments");	
 			}else{
