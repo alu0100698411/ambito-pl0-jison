@@ -2,10 +2,10 @@ var assert = chai.assert;
 
 suite('Pruebas para el parser', function(){
   test('Asociacion a izquierdas resta', function(){
-	var input = "a = 3-2-1.";
+	var input = "VAR a;\na = -1-2-3.";
 	var resultado = pl0.parse(input);
-	assert.equal(resultado.stat.type, "=");
-	assert.equal(resultado.stat.right.left.left.value, "3");
+	assert.equal(resultado.statements.type, "ASSIGMENT");
+	assert.equal(resultado.statements.right.left.left.value.value, "1");
 	
 
   });
@@ -18,12 +18,9 @@ test('Asociacion a izquierdas division', function(){
   });
 
   test('If-else', function(){
-	var input = "IF (a<3) THEN c = 2 ELSE c = 3.";
+	var input = "VAR a;\nIF (a<3) THEN a = 2 ELSE a = 3.";
 	var resultado = pl0.parse(input);
-	assert.equal(resultado.stat.type, "IF");
-	assert.equal(resultado.stat.then.left, "c");
-	assert.equal(resultado.stat.else.left, "c");
-	
+	assert.equal(resultado.statements.type, "IFELSE");
 
   }); 
   
@@ -32,28 +29,44 @@ test('Asociacion a izquierdas division', function(){
 
 
   test('While-Do', function(){
-	var input = "WHILE (a == 1) DO b = b+1.";
+	var input = "VAR a;\nWHILE (a != 10) DO a = a+1.";
 	var resultado = pl0.parse(input);
-	assert.equal(resultado.stat.type, "WHILE");
+	assert.equal(resultado.statements.type, "WHILE");
 	
 
   });
 
+  test('Funcion con parametros', function(){
+	var input = "VAR a;\nPROCEDURE funcion(variable);\nBEGIN\nvariable = 1\nEND;\na = 1.";
+	var resultado = pl0.parse(input);
+	assert.equal(resultado.procedimientos[0].type, "PROCEDURE");
+  });
+
 });
 
-suite('Pruebas para el paso de parmetros', function(){
-  test('Funcion con parametros', function(){
-	var input = "PROCEDURE funcion (variable);\na = 2;\nIF (a==2) THEN b = c.";
-	var resultado = pl0.parse(input);
-	assert.equal(resultado.procedimiento.type, "PROCEDURE");
-	assert.equal(resultado.procedimiento.arguments.value, "variable");
+suite('Pruebas para el analizador de ambito', function(){
+
+test('Numero equivocado de parametros', function(){
+	  assert.throws(function() { scopeAnalysis(pl0.parse("CONST PI = 3.14;\nVAR alto, ancho;\nVAR largo;\nPROCEDURE area(x, y);\nVAR resultado;\nBEGIN\nIF(x != 0) THEN\nresultado = x * y\nELSE\nresultado = 0\nEND;\nPROCEDURE volumen(x,y,z);\nVAR resultado;\nresultado = x * y * z;\nBEGIN\nCALL area(alto, ancho, error);\nCALL volumen(alto, ancho, largo)\nEND.")); }, "Procedure \"area\" expects 2 arguments");
+
   });
+  
+test('Pasar a una funcion un parametro sin definir', function(){
+	  assert.throws(function() { scopeAnalysis(pl0.parse("CONST PI = 3.14;\nVAR alto, ancho;\nVAR largo;\nPROCEDURE area(x, y);\nVAR resultado;\nBEGIN\nIF(x != 0) THEN\nresultado = x * y\nELSE\nresultado = 0\nEND;\nPROCEDURE volumen(x,y,z);\nVAR resultado;\nresultado = x * y * z;\nBEGIN\nCALL area(alto, error);\nCALL volumen(alto, ancho, largo)\nEND.")); }, "Identifier \"error\" has not being declared and it\'s being used");
+
+  });
+
+test('Parametro sin definir dentro de una funcion', function(){
+	  assert.throws(function() { scopeAnalysis(pl0.parse("CONST PI = 3.14;\nVAR alto, ancho;\nVAR largo;\nPROCEDURE area(x, y);\nVAR resultado;\nBEGIN\nIF(x != 0) THEN\nerror = x * y\nELSE\nresultado = 0\nEND;\nPROCEDURE volumen(x,y,z);\nVAR resultado;\nresultado = x * y * z;\nBEGIN\nCALL area(alto, ancho);\nCALL volumen(alto, ancho, largo)\nEND.")); }, "Identifier \"error\" has not being declared and it\'s being used");
+
+  });
+
 });
 
 
 suite('Errores', function(){
   test('No poner punto al final', function(){
-	  assert.throws(function() { pl0.parse("a = 1 + 1"); }, "Parse error on line 1:\na = 1 + 1\n---------^\nExpecting \'.\', \';\', \',\', \')\', \'END\', \'ELSE\', \'COMPARISON\', \'ADDSUBOP\', \'MULTDIVOP\', got \'EOF\'");
+	  assert.throws(function() { pl0.parse("a = 1 + 1"); }, "Parse error on line 1:\na = 1 + 1\n---------^\nExpecting \'.\', \';\', \',\', \')\', \'END\', \'ELSE\', \'COMPARISON\', \'+\', \'-\', \'*\', \'/\', got \'EOF\'");
 
   });
 
