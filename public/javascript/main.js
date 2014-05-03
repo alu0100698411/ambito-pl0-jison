@@ -24,35 +24,57 @@ $(document).ready(function() {
 
 });
 
-function scopeAnalysis(tree){
+var symbolTables = [];
+var symbolTableActual;
+var scope = 0;
 
-//CREO TABLA SIMBOLOS GENERAL
-var symbolTable = {name: "raiz", father: null, consts: {}, vars: {}, procs: {}};
-	//añadir procedimientos
-
-symbolTable.consts["PENE"] = "PLANTA";
-
-
-for (var i in tree.constantes){
-	for(var j in i.value){
-		symbolTable.consts[j.name] = j.value;	
-	}
+function getScope(){
+	return scope;
 }
+
+function makeNewScope(id) {
 /*
-for (var i in tree.variables){
-	for(var j in i.value){
-		symbolTable.vars[j.name] = j.name;	
+   scope++;
+   symbolTables[scope] = [];
+   symbolTable = symbolTables[scope];
+   return symbolTable;*/
+}
+
+function nodeAnalysis(node){
+	if (!node) return;
+
+	switch (node.type){
+		case "PROCEDURE":
+			node.symbolTable = {name: node.value, father: symbolTableActual, consts: {}, vars: {}, procs: {}};			
+			break;	
 	}
 }
-for (var i in tree.procedimientos){
-	symbolTable.procs[i.value] = i.arguments.length;
-}
-*/
 
-tree.sym_table = symbolTable;
-return tree;
-//LLAMA A ANALYSIS TREE PARA LOS HIJOS
 
+function scopeAnalysis(tree){
+	//CREO TABLA SIMBOLOS GENERAL
+	 var symbolTable = {name: "raiz", father: null, consts: {}, vars: {}, procs: {}};
+
+
+	for (var i in tree.constantes.value){
+		symbolTable.consts[tree.constantes.value[i].name] = tree.constantes.value[i].value;	
+	}
+
+	for (var i in tree.variables.value){
+		symbolTable.vars[tree.variables.value[i].name] = tree.variables.value[i].name;	
+	}
+
+	for (var i in tree.procedimientos){
+		symbolTable.procs[tree.procedimientos[i].value] = tree.procedimientos[i].arguments.length;	
+	}
+	
+	tree.symbolTable = symbolTable;
+	symbolTableActual = symbolTable;
+
+	nodeAnalysis(tree);
+
+
+	return tree;
 }
 
   
