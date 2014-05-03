@@ -1,38 +1,39 @@
 $(document).ready(function() {
   $('#parse').click(function() {
+    editor = $(".CodeMirror")[0].CodeMirror
+    var result;
     try {
-      editor = $(".CodeMirror")[0].CodeMirror
-      var result = pl0.parse(editor.getValue());
+      result = pl0.parse(editor.getValue());
       $('#output').html(JSON.stringify(result,undefined,2));
       $('#ambit').html(JSON.stringify(scopeAnalysis(result),undefined,2));
+
       $( '#salida').removeClass( "divdoble hidden" ).addClass( "divdoble unhidden" );
+      $( '#error').removeClass( "unhidden" ).addClass( "hidden" );
     } catch (e) {
-      $( '#salida').removeClass( "divdoble hidden" ).addClass( "divdoble unhidden" );
-      $('#output').html('<div class="error"><pre>\n' + String(e) + '\n</pre></div>');
+      $( '#error').removeClass( "hidden" ).addClass( "unhidden" );
+      $( '#salida').removeClass( "divdoble unhidden" ).addClass( "divdoble hidden" );
+      $('#error').html('<pre>\n' + String(e) + '\n</pre>');
     }
   });
-
+  $('#wipe').click(function() {
+    editor = $(".CodeMirror")[0].CodeMirror
+    editor.setValue("");
+	    
+  });
   $("#examples").change(function(ev) {
     var f = ev.target.files[0]; 
     var r = new FileReader();
     r.onload = function(e) { 
       var contents = e.target.result;
-      
-      input.innerHTML = contents;
+      editor = $(".CodeMirror")[0].CodeMirror    
+      editor.setValue(contents);
     }
     r.readAsText(f);
   });
 
 });
 
-var symbolTables = [];
 var symbolTableActual;
-var scope = 0;
-
-function getScope(){
-	return scope;
-}
-
 
 function nodeAnalysis(node){
 	if (!node) return;

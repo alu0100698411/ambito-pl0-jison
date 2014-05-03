@@ -151,15 +151,36 @@ label {
 
 #parse:hover {
   cursor: pointer;
-  background-color: #0083ff;
-  color: #000; 
+  background-color: lighten(#904, 20%);
+  color: #333;
 }
 
-   
-.error {
+#wipe {
+  border-radius: 15px;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  background-color: #2a87b2;
   color: $white;
-  background-color: $red;
 }
+
+
+#wipe:hover {
+  cursor: pointer;
+  background-color: lighten(#2a87b2, 20%);
+  color: #333;
+}
+
+#error {
+  margin: 0 auto;
+  margin-top:10px;
+  border-radius:10px;
+  padding:15px;
+  color: white;
+  background-color: $red;
+  text-align:left;
+}
+
 
 .centered {
   text-align: center;
@@ -250,6 +271,7 @@ form{
 }
 .hidden{
 	visibility:hidden;
+	height:0;
 }
 .unhidden{
 	visibility:visible;
