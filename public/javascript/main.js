@@ -32,13 +32,6 @@ function getScope(){
 	return scope;
 }
 
-function makeNewScope(id) {
-/*
-   scope++;
-   symbolTables[scope] = [];
-   symbolTable = symbolTables[scope];
-   return symbolTable;*/
-}
 
 function nodeAnalysis(node){
 	if (!node) return;
@@ -46,6 +39,12 @@ function nodeAnalysis(node){
 	switch (node.type){
 		case "PROCEDURE":
 			var symbolTable = {name: node.value, father: symbolTableActual, consts: {}, vars: {}, procs: {}};
+
+			if(node.hasOwnProperty("arguments") && node.arguments !== undefined){
+				for(var i in node.arguments){
+					symbolTable.vars[node.arguments[i].value]= node.arguments[i].value;
+				}                      
+			}
 			if(node.block.hasOwnProperty("constantes") && node.block.constantes !== undefined){
 				for (var i in node.block.constantes.value){
 					symbolTable.consts[node.block.constantes.value[i].name] = node.block.constantes.value[i].value;	
@@ -69,11 +68,68 @@ function nodeAnalysis(node){
 				for (var i in node.block.procedimientos){
 					nodeAnalysis(node.block.procedimientos[i]);
 				}
+			}
+			if(node.block.hasOwnProperty("statements") && node.block.statements !== undefined){
+				for (var i in node.block.statements){
+					nodeAnalysis(node.block.statements[i]);
+				}
 			}	
-
-			//FALTA LLAMAR A ANALIIS PARA STATEMENNTS
-				
+	
 			break;	
+		case "ASSIGMENT":
+			//COMPROBAR QUE LA ID IZQUIERDA NO ES UNA CONSTANTE Y ESTA DEFINIDO
+			nodeAnalysis(node.right);
+			break;
+		case "CALL":
+			//COMPROBAR QUE LA FUNCION EXISTE Y TIENE EL NUMERO DE ARGUMENTOS CORRECTOS
+			break;
+		case "BEGIN":
+			for (var i in node.statements){
+				nodeAnalysis(node.statements[i]);
+			}
+			break;
+		case "IF":
+			nodeAnalysis(node.condition);
+			for (var i in node.statements){
+				nodeAnalysis(node.statements[i]);
+			}
+			break;
+		case "IFELSE":
+			nodeAnalysis(node.condition);
+			for (var i in node.statements){
+				nodeAnalysis(node.statements[i]);
+			}
+			for (var i in node.elsestatements){
+				nodeAnalysis(node.elsestatements[i]);
+			}
+			break;
+		case "ODD":
+			nodeAnalysis(node.expresion);
+			break;
+		case "==":
+		case "!=":
+		case "<=":
+		case "<":
+		case ">":
+		case ">=":
+		case "+":
+		case "*":
+		case "/":
+			nodeAnalysis(node.left);
+			nodeAnalysis(node.right);
+			break;
+		case "-":
+			if(node.value){
+				nodeAnalysis(node.value);
+			}else{
+				nodeAnalysis(node.left);
+				nodeAnalysis(node.right);
+			}
+			break;	
+		case "NUMBER":
+			break;
+		case "ID":
+			break;
 	}
 
 }
@@ -103,14 +159,17 @@ function scopeAnalysis(tree){
 	tree.symbolTable = symbolTable;
 	symbolTableActual = symbolTable;
 	
-	
 	if(tree.hasOwnProperty("procedimientos") && tree.procedimientos !== undefined){
 		for (var i in tree.procedimientos){
 			nodeAnalysis(tree.procedimientos[i]);
 		}
 	}
-//	nodeAnalysis(tree.statements);
 
+	if(tree.hasOwnProperty("statements") && tree.statements !== undefined){
+				for (var i in tree.statements){
+					nodeAnalysis(tree.statements[i]);
+				}
+			}
 
 	return tree;
 }
