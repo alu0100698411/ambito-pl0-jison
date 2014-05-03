@@ -25,16 +25,20 @@ program
         { "procedure" ident ";" block ";" } statement .*/
  
 block
-        : constant variable procedure statement { $$ = { constantes: $1, variables: $2, procedimientos: $3, statatements: $4 }; }
+        : constant variable procedure statement { $$ = { type: "BLOCK",
+							 constantes: $1,
+							 variables: $2,
+							 procedimientos: $3,
+							 statatements: $4 }; }
         ;
  
 variable
         : /* empty */
         | VAR idlist ";" variable {	
 
-                                        $$ = [$2];
+                                        $$ = [{type: $1, value:$2}];
                                         if ($4 && $4.length > 0)
-                                                $$ = $$.concat($4);
+						$$ = $$.concat($4);
                                     }
         ;
 idlist
@@ -54,7 +58,7 @@ ident
 constant
         : /* empty */
         | CONST constantlist ";" constant {
-                                        $$ = [$2];
+                                        $$ = [{type:$1, value:$2}];
                                         if ($4 && $4.length > 0)
                                                 $$ = $$.concat($4);
                                     }
@@ -84,7 +88,7 @@ argumentlist
  
 procedure
         : /* empty */
-        | PROCEDURE ID "(" argumentlist ")" ";" block ";" procedure { $$ = [{    type: $1,
+        | PROCEDURE ID "(" argumentlist ")" ";" block ";" procedure { $$ = [{   type: $1,
                                                                                 value: $2,
                                                                                 arguments: $4,
                                                                                 block: $7

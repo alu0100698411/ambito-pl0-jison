@@ -84,13 +84,17 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:return $$[$0-2]
 break;
-case 2: this.$ = { constantes: $$[$0-3], variables: $$[$0-2], procedimientos: $$[$0-1], statatements: $$[$0] }; 
+case 2: this.$ = { type: "BLOCK",
+							 constantes: $$[$0-3],
+							 variables: $$[$0-2],
+							 procedimientos: $$[$0-1],
+							 statatements: $$[$0] }; 
 break;
 case 4:	
 
-                                        this.$ = [$$[$0-2]];
+                                        this.$ = [{type: $$[$0-3], value:$$[$0-2]}];
                                         if ($$[$0] && $$[$0].length > 0)
-                                                this.$ = this.$.concat($$[$0]);
+						this.$ = this.$.concat($$[$0]);
                                     
 break;
 case 5:this.$ = [$$[$0]];
@@ -104,7 +108,7 @@ break;
 case 7:this.$ = {name: $$[$0]};
 break;
 case 9:
-                                        this.$ = [$$[$0-2]];
+                                        this.$ = [{type:$$[$0-3], value:$$[$0-2]}];
                                         if ($$[$0] && $$[$0].length > 0)
                                                 this.$ = this.$.concat($$[$0]);
                                     
@@ -125,7 +129,7 @@ case 14:
 					this.$ = this.$.concat($$[$0]);
                                     
 break;
-case 17: this.$ = [{    type: $$[$0-8],
+case 17: this.$ = [{   type: $$[$0-8],
                                                                                 value: $$[$0-7],
                                                                                 arguments: $$[$0-5],
                                                                                 block: $$[$0-2]
@@ -647,8 +651,13 @@ performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var reserved_words ={ CALL: 'CALL', WHILE: 'WHILE', DO: 'DO', BEGIN: 'BEGIN', END: 'END', IF: 'IF', THEN: 'THEN', ELSE: 'ELSE', PROCEDURE: 'PROCEDURE', ODD: 'ODD', VAR: 'VAR', CONST: 'CONST'}
 
 function idORrw(x) {
-  return (x.toUpperCase() in reserved_words)? x.toUpperCase() : 'ID'
+  return (x.toUpperCase() in reserved_words)? x.toUpperCase() : 'ID';
 }
+
+
+
+
+
 
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {

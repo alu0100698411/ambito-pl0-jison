@@ -3,8 +3,13 @@
 var reserved_words ={ CALL: 'CALL', WHILE: 'WHILE', DO: 'DO', BEGIN: 'BEGIN', END: 'END', IF: 'IF', THEN: 'THEN', ELSE: 'ELSE', PROCEDURE: 'PROCEDURE', ODD: 'ODD', VAR: 'VAR', CONST: 'CONST'}
 
 function idORrw(x) {
-  return (x.toUpperCase() in reserved_words)? x.toUpperCase() : 'ID'
+  return (x.toUpperCase() in reserved_words)? x.toUpperCase() : 'ID';
 }
+
+
+
+
+
 %}
 /* lexical grammar */
 %%
@@ -35,6 +40,6 @@ function idORrw(x) {
 "CONST"                          {return 'CONST';}
 \b\d+("."\d*)?([eE][-+]?\d+)?\b  {return 'NUMBER';}
 \b[A-Za-z_]\w*\b                 {return idORrw(yytext);}
-//[+-]                             {return 'ADDSUBOP';}
+//[+-]                           {return 'ADDSUBOP';}
 //[*/] 			         {return 'MULTDIVOP';}
 <<EOF>>                    	 {return 'EOF';}
