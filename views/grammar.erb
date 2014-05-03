@@ -97,13 +97,13 @@ condition
         ;
 
 expresion
-  : expresion '+' expresion
-  | expresion '-' expresion 
-  | expresion '*' expresion 
-  | expresion '/' expresion 
-  | '-' expresion %prec UMINUS 
-  | base
-  ;
+  	: expresion '+' expresion
+  	| expresion '-' expresion 
+ 	| expresion '*' expresion 
+ 	| expresion '/' expresion 
+ 	| '-' expresion %prec UMINUS 
+ 	| base
+ 	;
 
 base
         : ID 
