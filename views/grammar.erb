@@ -26,91 +26,90 @@ Recuerde que una gramática $G$ es una cuaterna $G =(\Sigma,V,P,S)$.
     <li>
 <pre>
 program
-	: block "." EOF
-	;
-
+        : block "." EOF 
+        ;
+ 
 block
-	: constant variable procedure statement
-	;
-
-variable 
-	: /* empty */
-	| VAR idlist ";" variable
-	;
+        : constant variable procedure statement 
+        ;
+ 
+variable
+        : /* empty */
+        | VAR idlist ";" variable 
+        ;
 idlist
-	: ID
-	| idlist ","  ID
+        : ident 
+        | idlist ","  ident 
+        ;
+ 
+ident
+	: ID 
 	;
 
-constant 
-	: /* empty */
-	| CONST constantlist ";" constant
-	;
-
+ 
+constant
+        : /* empty */
+        | CONST constantlist ";" constant
+        ;
+ 
 constantlist
-	: ID "=" NUMBER
-	| constantlist ","  ID "=" NUMBER
-	;
-
+        : idnumber 
+        | constantlist ","  idnumber 
+        ;
+ 
+idnumber
+        :  ID "=" NUMBER
+        ;
+ 
 argumentlist
-	: factor
-	| argumentlist ","  factor
-	| /* empty */
-	;
-
-
+        : base 
+        | argumentlist ","  base  
+        | /* empty */
+        ;
+ 
+ 
 procedure
-	: /* empty */
-	| PROCEDURE ID "(" argumentlist ")" ";" block ";" procedure
-	;
+        : /* empty */
+        | PROCEDURE ID "(" argumentlist ")" ";" block ";" procedure 
+        ;
 
 statement
-	: ID "=" expresion
-	| CALL ID "(" argumentlist ")"
-	| BEGIN statementlist END
-	| ifstatement
-	| WHILE "(" condition ")" DO statement
-	;
-
+        : ID "=" expresion 
+        | CALL ID "(" argumentlist ")" 
+        | BEGIN statementlist END 
+        | ifstatement
+        | WHILE '(' condition ')'  DO statement 
+        ;
+ 
 ifstatement
-	: IF "(" condition ")" THEN statement 
-	| IF "(" condition ")" THEN statement ELSE statement
-	;
-
+        : IF '(' condition ')' THEN statement
+        | IF '(' condition ')' THEN statement ELSE statement 
+        ;
+ 
 statementlist
-	: statement
-	| statementlist ";" statement
-	;
+        : statement 
+        | statementlist ";" statement 
+        ;
 
-constantlistargumentlistprocedurestatementifstatementstatementlistcondition
-	: ODD expresion
-	| expresion COMPARISON expresion
-	;
+condition
+        : ODD expresion 
+        | expresion COMPARISON expresion 
+        ;
 
 expresion
-	: ADDSUBOP termlist
-	| termlist
-	;
+  : expresion '+' expresion
+  | expresion '-' expresion 
+  | expresion '*' expresion 
+  | expresion '/' expresion 
+  | '-' expresion %prec UMINUS 
+  | base
+  ;
 
-termlist
-	: term
-	| termlist ADDSUBOP term
-	;
-
-term
-	: factorlist
-	;
-
-factorlist
-	: factor
-	| factorlist MULTDIVOP factor
-	;
-
-factor
-	: ID
-	| NUMBER
-	| "(" expresion ")"
-	;
+base
+        : ID 
+        | NUMBER 
+        | "(" expresion ")" 
+        ;
 </pre>
   </ol>
   <li> Start symbol: $prog$
