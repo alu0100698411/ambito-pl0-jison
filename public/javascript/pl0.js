@@ -91,10 +91,9 @@ case 2: this.$ = { type: "BLOCK",
 							 statatements: $$[$0] }; 
 break;
 case 4:	
-
-                                        this.$ = [{type: $$[$0-3], value:$$[$0-2]}];
-                                        if ($$[$0] && $$[$0].length > 0)
-						this.$ = this.$.concat($$[$0]);
+                                        this.$ = {type:$$[$0-3], value:$$[$0-2]};
+                                        if ($$[$0] && $$[$0].value.length > 0)
+                                                this.$.value = this.$.value.concat($$[$0].value);
                                     
 break;
 case 5:this.$ = [$$[$0]];
@@ -108,9 +107,9 @@ break;
 case 7:this.$ = {name: $$[$0]};
 break;
 case 9:
-                                        this.$ = [{type:$$[$0-3], value:$$[$0-2]}];
-                                        if ($$[$0] && $$[$0].length > 0)
-                                                this.$ = this.$.concat($$[$0]);
+                                        this.$ = {type:$$[$0-3], value:$$[$0-2]};
+                                        if ($$[$0] && $$[$0].value.length > 0)
+                                                this.$.value = this.$.value.concat($$[$0].value);
                                     
 break;
 case 10:this.$ =  [$$[$0]];

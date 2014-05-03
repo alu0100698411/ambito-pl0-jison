@@ -35,10 +35,9 @@ block
 variable
         : /* empty */
         | VAR idlist ";" variable {	
-
-                                        $$ = [{type: $1, value:$2}];
-                                        if ($4 && $4.length > 0)
-						$$ = $$.concat($4);
+                                        $$ = {type:$1, value:$2};
+                                        if ($4 && $4.value.length > 0)
+                                                $$.value = $$.value.concat($4.value);
                                     }
         ;
 idlist
@@ -58,9 +57,9 @@ ident
 constant
         : /* empty */
         | CONST constantlist ";" constant {
-                                        $$ = [{type:$1, value:$2}];
-                                        if ($4 && $4.length > 0)
-                                                $$ = $$.concat($4);
+                                        $$ = {type:$1, value:$2};
+                                        if ($4 && $4.value.length > 0)
+                                                $$.value = $$.value.concat($4.value);
                                     }
         ;
  
