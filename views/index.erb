@@ -9,21 +9,21 @@
 	<div id="form">
 		<form action="/save" method="post">
 			<textarea id="input" name="input" autofocus rows = "10"><%= source %></textarea>
-		</form>	  
-		<div class="divdoble">
-			<div class="divmitad left">
-				<label for="saveas"><b>Save file as</b></label>
-				<input id="saveas" type="text" name="fname" title="name" pattern="\w+" />
+			<div class="divdoble">
+				<div class="divmitad left">
+					<label for="saveas"><b>Save file as</b></label>
+					<input id="saveas" type="text" name="fname" title="name" pattern="\w+" />
 
+				</div>
+				<div class="divmitad right">
+					<button id="wipe" type="button">CLEAR EDITOR</button>
+					<button id="parse" type="button">CLICK HERE FOR PARSING</button>
+				</div>
 			</div>
-			<div class="divmitad right">
-				<button id="wipe" type="button">CLEAR EDITOR</button>
-				<button id="parse" type="button">CLICK HERE FOR PARSING</button>
-			</div>
-		</div>
-	<pre class="hidden justified">	
-		<div id="error"></pre>
-	</pre>
+		</form>	  
+		<pre class="hidden justified">	
+			<div id="error"></div>
+		</pre>
 	</div>
   <div id="flash"><%= flash[:notice] if flash[:notice]%></div>
 
