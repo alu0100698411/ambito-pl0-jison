@@ -45,9 +45,37 @@ function nodeAnalysis(node){
 
 	switch (node.type){
 		case "PROCEDURE":
-			node.symbolTable = {name: node.value, father: symbolTableActual, consts: {}, vars: {}, procs: {}};			
+			var symbolTable = {name: node.value, father: symbolTableActual, consts: {}, vars: {}, procs: {}};
+			if(node.block.hasOwnProperty("constantes") && node.block.constantes !== undefined){
+				for (var i in node.block.constantes.value){
+					symbolTable.consts[node.block.constantes.value[i].name] = node.block.constantes.value[i].value;	
+				}
+			delete node.block.constantes;
+			}
+			if(node.block.hasOwnProperty("variables") && node.block.variables !== undefined){
+				for (var i in node.block.variables.value){
+					symbolTable.vars[node.block.variables.value[i].name] = node.block.variables.value[i].name;	
+				}
+			delete node.block.variables;
+			}
+			if(node.block.hasOwnProperty("procedimientos") && node.block.procedimientos !== undefined){
+				for (var i in node.block.procedimientos){
+					symbolTable.procs[node.block.procedimientos[i].value] = node.block.procedimientos[i].arguments.length;	
+				}
+			}
+			node.symbolTable = symbolTable;
+			symbolTableActual = symbolTable;
+			if(node.block.hasOwnProperty("procedimientos") && node.block.procedimientos !== undefined){
+				for (var i in node.block.procedimientos){
+					nodeAnalysis(node.block.procedimientos[i]);
+				}
+			}	
+
+			//FALTA LLAMAR A ANALIIS PARA STATEMENNTS
+				
 			break;	
 	}
+
 }
 
 
@@ -55,23 +83,33 @@ function scopeAnalysis(tree){
 	//CREO TABLA SIMBOLOS GENERAL
 	 var symbolTable = {name: "raiz", father: null, consts: {}, vars: {}, procs: {}};
 
-
-	for (var i in tree.constantes.value){
-		symbolTable.consts[tree.constantes.value[i].name] = tree.constantes.value[i].value;	
+	if(tree.hasOwnProperty("constantes") && tree.constantes !== undefined){
+		for (var i in tree.constantes.value){
+			symbolTable.consts[tree.constantes.value[i].name] = tree.constantes.value[i].value;	
+		}
+	delete tree.constantes;
 	}
-
-	for (var i in tree.variables.value){
-		symbolTable.vars[tree.variables.value[i].name] = tree.variables.value[i].name;	
+	if(tree.hasOwnProperty("variables") && tree.variables !== undefined){
+		for (var i in tree.variables.value){
+			symbolTable.vars[tree.variables.value[i].name] = tree.variables.value[i].name;	
+		}
+	delete tree.variables;
 	}
-
-	for (var i in tree.procedimientos){
-		symbolTable.procs[tree.procedimientos[i].value] = tree.procedimientos[i].arguments.length;	
+	if(tree.hasOwnProperty("procedimientos") && tree.procedimientos !== undefined ){
+		for (var i in tree.procedimientos){
+			symbolTable.procs[tree.procedimientos[i].value] = tree.procedimientos[i].arguments.length;	
+		}
 	}
-	
 	tree.symbolTable = symbolTable;
 	symbolTableActual = symbolTable;
-
-	nodeAnalysis(tree);
+	
+	
+	if(tree.hasOwnProperty("procedimientos") && tree.procedimientos !== undefined){
+		for (var i in tree.procedimientos){
+			nodeAnalysis(tree.procedimientos[i]);
+		}
+	}
+//	nodeAnalysis(tree.statements);
 
 
 	return tree;
